@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent-blue: #3b82f6;
+  --color-accent-purple: #8b5cf6;
+  --color-bg-dark: #0f111a;
+  --color-surface-dark: #1e2130;
+  --color-border-dark: #2a2e40;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg-dark);
+    color: #f3f4f6;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.08), transparent 25%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-surface-dark/60 backdrop-blur-md border border-border-dark rounded-xl shadow-xl;
+  }
+  
+  .primary-button {
+    @apply relative overflow-hidden bg-gradient-to-r from-accent-blue to-accent-purple 
+           text-white font-medium py-2 px-6 rounded-lg shadow-lg 
+           transition-all duration-300 hover:scale-105 hover:shadow-accent-purple/30 
+           active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+}
+
+/* View transitions as requested */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.25s;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-dark);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-purple);
+}
