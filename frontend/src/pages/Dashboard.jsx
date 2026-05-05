@@ -1,3 +1,4 @@
+import { API_URL } from '../config';
 import { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Loader2, AlertTriangle, FileText, Upload, Zap, Eye, Download } from 'lucide-react';
@@ -38,7 +39,7 @@ export default function Dashboard() {
     setProgress({ current: 0, total: 0, ioc: '', status: '' });
 
     try {
-      const res = await fetch('http://localhost:5555/api/scan', {
+      const res = await fetch(`${API_URL}/api/scan`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

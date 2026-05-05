@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_URL } from '../config';
 import { useAuth } from '../context/AuthContext';
 import { History as HistoryIcon, ChevronRight, Calendar, Shield, AlertTriangle, ArrowRightLeft, X } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export default function History() {
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch('http://localhost:5555/api/scan/history', {
+      const res = await fetch(`${API_URL}/api/scan/history`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -29,7 +30,7 @@ export default function History() {
 
   const viewReport = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5555/api/scan/history/${id}`, {
+  const res = await fetch(`${API_URL}/api/scan/history/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -48,7 +49,7 @@ export default function History() {
 
   const runDiff = async (oldId, newId) => {
     try {
-      const res = await fetch(`http://localhost:5555/api/scan/diff/${oldId}/${newId}`, {
+      const res = await fetch(`${API_URL}/api/scan/diff/${oldId}/${newId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();

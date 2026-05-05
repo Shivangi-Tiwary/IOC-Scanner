@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Settings as SettingsIcon, Key, Save, Loader2, CheckCircle2, AlertTriangle, Trash2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Settings() {
   const { user, token, updateProfile } = useAuth();
   const [keys, setKeys] = useState({
-    vt: user?.keys?.vt || '',
-    abuseipdb: user?.keys?.abuseipdb || '',
-    shodan: user?.keys?.shodan || ''
+    vt: '',
+    abuseipdb: '',
+    shodan: ''
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -17,6 +18,25 @@ export default function Settings() {
   const [whitelist, setWhitelist] = useState([]);
   const [wlLoaded, setWlLoaded] = useState(false);
   const [newWl, setNewWl] = useState({ ioc: '', type: 'ip' });
+
+  useEffect(() => {
+    const fetchKeys = async () => {
+      try {
+          const res = await fetch(`${API_URL}/api/whitelist`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.keys) {
+          setKeys({
+            vt: data.keys.vt || '',
+            abuseipdb: data.keys.abuseipdb || '',
+            shodan: data.keys.shodan || ''
+          });
+        }
+      } catch {}
+    };
+    fetchKeys();
+  }, []);
 
   const handleSaveKeys = async (e) => {
     e.preventDefault();
@@ -36,7 +56,7 @@ export default function Settings() {
 
   const loadWhitelist = async () => {
     try {
-      const res = await fetch('http://localhost:5555/api/whitelist', {
+      const res = await fetch(`${API_URL}/api/whitelist`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -50,7 +70,7 @@ export default function Settings() {
   const addToWhitelist = async () => {
     if (!newWl.ioc.trim()) return;
     try {
-      const res = await fetch('http://localhost:5555/api/whitelist', {
+      const res = await fetch(`${API_URL}/api/whitelist`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(newWl)
@@ -65,7 +85,7 @@ export default function Settings() {
 
   const removeFromWhitelist = async (id) => {
     try {
-      await fetch(`http://localhost:5555/api/whitelist/${id}`, {
+      await fetch(`${API_URL}/api/whitelist/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
