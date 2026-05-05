@@ -22,7 +22,7 @@ export default function Settings() {
   useEffect(() => {
     const fetchKeys = async () => {
       try {
-          const res = await fetch(`${API_URL}/api/whitelist`, {
+          const res = await fetch(`${API_URL}/api/auth/profile`, {  // ← fix this
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
